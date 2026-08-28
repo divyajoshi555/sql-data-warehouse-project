@@ -1,0 +1,21 @@
+order_id,customer_name,quantity,unit_price,discount_percent,shipping_charge
+ORD001,Amit Sharma,2,500,10,50
+ORD002,Priya Rao,1,1200,5,0
+ORD003,Rahul Mehta,3,300,0,40
+ORD004,Neha Singh,0,700,10,30
+ORD005,Karan Verma,-2,450,15,25
+ORD006,Sneha Iyer,2,-500,10,50
+ORD007,Arjun Nair,1,1000,-5,60
+ORD008,Meera Joshi,4,250,120,40
+ORD009,Vikram Shah,2,800,10,-20
+ORD010,,3,600,10,50
+,Anita Das,2,400,5,30
+ORD012,Rohan Kapoor,,900,10,50
+ORD013,Divya Menon,2,,10,50
+ORD014,Suresh Kumar,2,700,,50
+ORD015,Pooja Jain,2,700,10,
+ORD016,Manish Gupta,two,500,10,40
+ORD017,Kavita Rao,2,five hundred,10,40
+ORD018,Nitin Bose,2,500,ten,40
+ORD019,Swati Desai,2,500,10,free
+ORD020,Harsh Patel,5,1000,20,100
