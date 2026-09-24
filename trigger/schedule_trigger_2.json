@@ -1,0 +1,36 @@
+{
+	"name": "schedule_trigger_2",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "PL_employee_file_copy_master",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"p_filename": "@concat('ORDER_', formatDateTime(trigger().scheduledTime, 'yyyyMMdd'),'.csv')"
+				}
+			},
+			{
+				"pipelineReference": {
+					"referenceName": "Day-6-PL_Employee_File_Copy_Master",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"p_filename": "@concat('ORD_', formatDateTime(trigger().scheduledTime, 'yyyyMMdd'),'.csv')"
+				}
+			}
+		],
+		"type": "ScheduleTrigger",
+		"typeProperties": {
+			"recurrence": {
+				"frequency": "Minute",
+				"interval": 989,
+				"startTime": "2026-09-19T07:29:00",
+				"timeZone": "India Standard Time"
+			}
+		}
+	}
+}

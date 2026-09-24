@@ -1,0 +1,29 @@
+{
+	"name": "storage_event_trigger_1",
+	"properties": {
+		"annotations": [],
+		"runtimeState": "Started",
+		"pipelines": [
+			{
+				"pipelineReference": {
+					"referenceName": "DAY 6- PL_Employee_Salary_Processing_Child",
+					"type": "PipelineReference"
+				},
+				"parameters": {
+					"p_folder_path": "raw",
+					"p_file_name": "emp.csv"
+				}
+			}
+		],
+		"type": "BlobEventsTrigger",
+		"typeProperties": {
+			"blobPathBeginsWith": "/source/blobs/raw",
+			"blobPathEndsWith": "emp.csv",
+			"ignoreEmptyBlobs": true,
+			"scope": "/subscriptions/a7769a56-a352-411e-9bbc-1a62ab0cea41/resourceGroups/Test-ResourceGroup/providers/Microsoft.Storage/storageAccounts/teststorageaccdevbatch",
+			"events": [
+				"Microsoft.Storage.BlobCreated"
+			]
+		}
+	}
+}

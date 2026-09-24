@@ -1,0 +1,54 @@
+{
+	"name": "DAY 6- PL_Employee_Salary_Processing_Child",
+	"properties": {
+		"activities": [
+			{
+				"name": "Data flow1",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DF_Employee_Salary_Transformation",
+						"type": "DataFlowReference",
+						"datasetParameters": {
+							"source1": {
+								"df_ds_folder_name": {
+									"value": "@pipeline().parameters.p_folder_path",
+									"type": "Expression"
+								},
+								"df_ds_file_name": {
+									"value": "@pipeline().parameters.p_file_name",
+									"type": "Expression"
+								}
+							}
+						}
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"parameters": {
+			"p_folder_path": {
+				"type": "string"
+			},
+			"p_file_name": {
+				"type": "string"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-09-18T23:11:14Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

@@ -1,0 +1,194 @@
+{
+	"name": "DAY-4-PL_Daily_Sales_File_Processing",
+	"properties": {
+		"activities": [
+			{
+				"name": "Get file list",
+				"type": "GetMetadata",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataset": {
+						"referenceName": "ds_source_sales_folder",
+						"type": "DatasetReference"
+					},
+					"fieldList": [
+						"childItems"
+					],
+					"storeSettings": {
+						"type": "AzureBlobFSReadSettings",
+						"recursive": true,
+						"enablePartitionDiscovery": false
+					},
+					"formatSettings": {
+						"type": "DelimitedTextReadSettings"
+					}
+				}
+			},
+			{
+				"name": "Set File Count",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Get file list",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "var_file_count",
+					"value": {
+						"value": "@length(activity('Get file list').output.childItems)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Check files available",
+				"type": "IfCondition",
+				"dependsOn": [
+					{
+						"activity": "Set File Count",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"expression": {
+						"value": "@equals(int(variables('var_file_count')), 1)",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "For each available file",
+				"type": "ForEach",
+				"dependsOn": [
+					{
+						"activity": "Check files available",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"userProperties": [],
+				"typeProperties": {
+					"items": {
+						"value": "@createArray('Bangalore','Mumbai','Delhi','Hyderabad')",
+						"type": "Expression"
+					},
+					"isSequential": true,
+					"activities": [
+						{
+							"name": "Copy data1",
+							"type": "Copy",
+							"dependsOn": [],
+							"policy": {
+								"timeout": "0.12:00:00",
+								"retry": 0,
+								"retryIntervalInSeconds": 30,
+								"secureOutput": false,
+								"secureInput": false
+							},
+							"userProperties": [],
+							"typeProperties": {
+								"source": {
+									"type": "ExcelSource",
+									"storeSettings": {
+										"type": "AzureBlobFSReadSettings",
+										"recursive": true,
+										"enablePartitionDiscovery": false
+									}
+								},
+								"sink": {
+									"type": "DelimitedTextSink",
+									"storeSettings": {
+										"type": "AzureBlobFSWriteSettings"
+									},
+									"formatSettings": {
+										"type": "DelimitedTextWriteSettings",
+										"quoteAllText": true,
+										"fileExtension": ".txt"
+									}
+								},
+								"enableStaging": false,
+								"translator": {
+									"type": "TabularTranslator",
+									"typeConversion": true,
+									"typeConversionSettings": {
+										"allowDataTruncation": true,
+										"treatBooleanAsNumber": false
+									}
+								}
+							},
+							"inputs": [
+								{
+									"referenceName": "DS_Excel_Sales_File",
+									"type": "DatasetReference",
+									"parameters": {
+										"ds_p_folder_path": {
+											"value": "@pipeline().parameters.pipeline_folder_path",
+											"type": "Expression"
+										},
+										"ds_p_file_name": {
+											"value": "@pipeline().parameters.pipeline_file_name",
+											"type": "Expression"
+										},
+										"ds_p_sheet_name": {
+											"value": "@item()",
+											"type": "Expression"
+										}
+									}
+								}
+							],
+							"outputs": [
+								{
+									"referenceName": "DS_Excel_Sales_File_Copy_Sink",
+									"type": "DatasetReference",
+									"parameters": {
+										"ds_p_output_folder": "@concat('staging/sales/', item(), '/')",
+										"ds_p_output_file": "@concat(item(), '_sales.csv')"
+									}
+								}
+							]
+						}
+					]
+				}
+			}
+		],
+		"parameters": {
+			"pipeline_folder_path": {
+				"type": "string"
+			},
+			"pipeline_file_name": {
+				"type": "string"
+			}
+		},
+		"variables": {
+			"var_file_count": {
+				"type": "Integer"
+			},
+			"var_sheet_list": {
+				"type": "Array"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2026-09-10T07:41:56Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

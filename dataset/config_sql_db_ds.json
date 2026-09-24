@@ -1,0 +1,17 @@
+{
+	"name": "config_sql_db_ds",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "AzureSqlDatabase1LinkedService",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "adf_table_config"
+		}
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
